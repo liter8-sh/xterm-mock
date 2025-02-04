@@ -44,18 +44,53 @@ const shellParams: ShellParams = {
     hostName: 'liter8'
 };
 const env = new ShellEnv(shellParams);
-setShellEnv(env);
-
 ```
 
 ## Components
+
 ### ShellEnv
-Todo: detail
+- **Description:**  
+  Manages the terminal shell session. It wraps the xterm.js terminal and handles command processing and output.
+- **Constructor Parameters:**  
+  - `params` (ShellParams): Configuration details including terminal instance, welcome messages, file system structure, and callbacks.
+- **Returns:**  
+  A ShellEnv instance that manages session state and terminal interactions.
+
 ### ShellParams
-Todo: detail
+- **Description:**  
+  Defines the configuration for initializing a shell session.
+- **Properties:**  
+  - `term`: The xterm.js Terminal instance.
+  - `welcomeMessages`: An array of strings to display when the terminal starts.
+  - `directories`: The root ShellDir representing the simulated file system.
+  - `pathUpdaterFunc`: A function that updates the current path (accepts a string).
+  - `exitFunc`: A function that handles exiting the terminal.
+  - `projectName`: A string for the project name.
+  - `userName`: A string for the user name.
+  - `hostName`: A string for the host name.
+
 ### ShellFile
-Todo: detail
+- **Description:**  
+  Represents a file in the simulated file system.
+- **Constructor Parameters:**  
+  - `name` (string): The file's name.
+  - `ext` (string): The file's extension.
+  - `content` (string): The file's contenxt in plain text format.
+- **Returns:**  
+  A ShellFile instance that can be used within the file system simulation.
+
 ### ShellDir
-Todo: detail
+- **Description:**  
+  Represents a directory in the simulated file system.
+- **Constructor Parameters:**  
+  - `name` (string): The directory's name.
+  - `children` (ShellDir[]): An array of child directories.
+  - `files` (ShellFile[]): An array of files contained in the directory.
+- **Returns:**  
+  A ShellDir instance that organizes files and subdirectories in a hierarchical structure.
+
+--- 
+
+These brief descriptions outline the purpose, parameters, and returns for each component without extra detail.
 
 This project was created using `bun init` in bun v1.1.45. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

@@ -123,9 +123,62 @@ export class ShellEnv {
         this.printWelcomeMessage();
         this.pathUpdaterFunc?.(this.getPath());
     }
+
+    clearCmdWhiteSpace(cmd: string): string {
+        // handle many white spaces
+        let curr = '';
+        let skip = false;
+        let singleQuoteOpen = false;
+        let doubleQuoteOpen = false;
+        let parts: string[] = []
+        for (const c of cmd) {
+            if (c == ' ') {
+                if (skip) continue;
+                if (!singleQuoteOpen && !doubleQuoteOpen)
+                    skip = true;
+            } else if (c == '"') {
+                if (doubleQuoteOpen) {
+                    skip = true;
+                    doubleQuoteOpen = false;
+                } else if (!singleQuoteOpen) {
+                    curr += '"';
+                    skip = false;
+                    doubleQuoteOpen = true;
+                    continue;
+                }
+            } else if (c == "'") {
+                if (singleQuoteOpen) {
+                    skip = true;
+                    singleQuoteOpen = false;
+                } else if (!doubleQuoteOpen) {
+                    curr += "'";
+                    skip = false;
+                    singleQuoteOpen = true;
+                    continue;
+                }
+            } else
+                skip = false;
+
+            curr += c;
+            if (skip) {
+                curr = curr.trimEnd();
+                if (curr)
+                    parts.push(curr);
+                // reset
+                curr = '';
+            }
+        }
+
+        if (curr)
+            parts.push(curr);
+
+        let res: string = parts.join(' ');
+
+        return res;
+    }
     
     handleCommand(cmd: string) {
-        const cmds = cmd.split(' ');
+        const cmds = this.clearCmdWhiteSpace(cmd).split(' ');
         switch(cmds[0]) {
             case 'help': {
                 this.cmdHelp(cmds.slice(1, cmds.length))
